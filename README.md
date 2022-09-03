@@ -1,6 +1,6 @@
 ### MZ-LUMBERJACK - a progression (XP) based lumberjack job + crafting for QB-CORE based FiveM servers
 
-Created by Mr_Zain#4139 - inspired by TRClassic#0001's "tr-lumberjack" resource - see: **[mz-skills](https://github.com/trclassic92/tr-lumberjack)**
+Created by Mr_Zain#4139 - inspired by TRClassic#0001's "tr-lumberjack" resource - see: **[tr-lumberjack](https://github.com/trclassic92/tr-lumberjack)**
 
 ### Introduction 
 - Chop down trees with your lumberjack axe and turn what you acquire into something that TJ's will acquire for good money.
