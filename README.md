@@ -77,6 +77,12 @@ OPTIONAL: You will need "plastic" and "rustynails" each of which is given by mz-
 	['weapon_battleaxe'] 			 = {['name'] = 'weapon_battleaxe', 		 	  	['label'] = 'Lumber Axe', 				['weight'] = 1000, 		['type'] = 'weapon', 	['ammotype'] = nil,						['image'] = 'weapon_battleaxe.png', 	['unique'] = true, 		['useable'] = false, 	['description'] = 'A large broad-bladed axe used in ancient warfare'},
 ```
 
+Please note: The change to the battle axe is purely aesthetic, if it causes an issue with the functionality of the resource, the change can be reverted:
+
+```lua
+['weapon_battleaxe'] 			 = {['name'] = 'weapon_battleaxe', 		 	  	['label'] = 'Battle Axe', 				['weight'] = 1000, 		['type'] = 'weapon', 	['ammotype'] = nil,						['image'] = 'weapon_battleaxe.png', 	['unique'] = true, 		['useable'] = false, 	['description'] = 'A large broad-bladed axe used in ancient warfare'},
+```
+
 7. In order to allow the axe to be purchaseable, you can amend QB-SHOPS/CONFIG.LUA to add the following to the end of the "hardware" store (starting at line 258 of config.lua if you have not otherwise amended qb-shops):
 
 ```lua
