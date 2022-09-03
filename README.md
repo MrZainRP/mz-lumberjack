@@ -2,6 +2,10 @@
 
 Created by Mr_Zain#4139 - inspired by TRClassic#0001's "tr-lumberjack" resource - see: **[tr-lumberjack](https://github.com/trclassic92/tr-lumberjack)**
 
+## PREVIEW
+
+[![mz-lumberjack](https://i.imgur.com/sT0yDDO.jpeg)](https://youtu.be/f34kdZCqmIk "mz-lumberjack for FiveM by Mr_Zain#4139")
+
 ### Introduction 
 - Chop down trees with your lumberjack axe and turn what you acquire into something that TJ's will acquire for good money.
 - Highly customisable via config, everything from whether your tree chopping uses skillchecks or not to the XP a player obtains for each function is completely customisable (and everything in between including skill parses, progressbar timings, cost of inputs and outputs and sale prices)
