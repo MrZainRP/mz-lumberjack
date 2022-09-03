@@ -88,4 +88,4 @@ OPTIONAL: You will need "plastic" and "rustynails" each of which is given by mz-
 
 ### E. RESTART SERVER
 
-8. If you attend to all of the above steps you will need to restart the server in order for the new added items to be recognised by qb-core. Starting the mz-scrap resource without doing this will cause errors. Please restart your server ensuring that mz-scrap is ensured/starts after qb-core starts (ideally it should just form part of your [qb] folder). Happy sbin diving!
+8. If you attend to all of the above steps you will need to restart the server in order for the new added items to be recognised by qb-core. Starting the mz-scrap resource without doing this will cause errors. Please restart your server ensuring that mz-lumberjack is ensured/starts after qb-core starts (ideally it should just form part of your [qb] folder). Happy tree chopping and crafting!
