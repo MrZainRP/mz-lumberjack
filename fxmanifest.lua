@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Mr_Zain#4139'
 description 'mz-lumberjack - Progression based tree chopping with mz-skills integration'
-version '1.0.0'
+version '1.1.0'
 
 client_scripts {
     '@PolyZone/client.lua',
