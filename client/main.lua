@@ -13,6 +13,15 @@ local lvl5 = false
 local lvl6 = false
 local lvl7 = false 
 local lvl8 = false
+local treebarkprocess = false
+local baggingmulch = false
+local woodwedgeprocess = false
+local thinlogprocess = false
+local midlogprocess = false
+local thicklogprocess = false
+local thickerlogprocess = false
+local makepalletprocess = false
+local makemulchbagprocess = false
 
 RegisterNetEvent('mz-lumberjack:getLumberStage', function(stage, state, k)
     Config.TreeLocations[k][stage] = state
@@ -292,9 +301,10 @@ end)
 
 RegisterNetEvent('mz-lumberjack:client:MulchBark')
 AddEventHandler('mz-lumberjack:client:MulchBark', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
+    if not treebarkprocess then 
+        if QBCore.Functions.HasItem("treebark") then
             TriggerServerEvent("mz-lumberjack:server:MulchBark")
+            treebarkprocess = true 
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["treebark"]["name"], image = QBCore.Shared.Items["treebark"]["image"]}, 
@@ -308,7 +318,13 @@ AddEventHandler('mz-lumberjack:client:MulchBark', function()
             Wait(3000)
             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
         end
-    end, {"treebark"})
+    else
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You are already doing something... Slow down!', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("CONCENTRATE", 'You are already doing something... Slow down!', 3500, "error")
+        end   
+    end
 end)
 
 RegisterNetEvent('mz-lumberjack:client:MulchBarkMinigame')
@@ -428,9 +444,25 @@ end)
 
 RegisterNetEvent('mz-lumberjack:client:BagMulch')
 AddEventHandler('mz-lumberjack:client:BagMulch', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
-            TriggerServerEvent("mz-lumberjack:server:BagMulch")
+    if not baggingmulch then 
+        if QBCore.Functions.HasItem("treemulch") then
+            if QBCore.Functions.HasItem("emptymulchbag") then
+                baggingmulch = true 
+                TriggerServerEvent("mz-lumberjack:server:BagMulch")
+            else
+                local requiredItems = {
+                    [1] = {name = QBCore.Shared.Items["treemulch"]["name"], image = QBCore.Shared.Items["treemulch"]["image"]}, 
+                    [2] = {name = QBCore.Shared.Items["emptymulchbag"]["name"], image = QBCore.Shared.Items["emptymulchbag"]["image"]}, 
+                }  
+                if Config.NotifyType == 'qb' then
+                    QBCore.Functions.Notify('You need a bag and some mulch...', "error", 3500)
+                elseif Config.NotifyType == "okok" then
+                    exports['okokNotify']:Alert("NEED MATERIALS", "You need a bag and some mulch...", 3500, "error")
+                end   
+                TriggerEvent('inventory:client:requiredItems', requiredItems, true)
+                Wait(3000)
+                TriggerEvent('inventory:client:requiredItems', requiredItems, false)
+            end
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["treemulch"]["name"], image = QBCore.Shared.Items["treemulch"]["image"]}, 
@@ -444,8 +476,14 @@ AddEventHandler('mz-lumberjack:client:BagMulch', function()
             TriggerEvent('inventory:client:requiredItems', requiredItems, true)
             Wait(3000)
             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
-        end
-    end, {"treemulch", "emptymulchbag"})
+        end 
+    else
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You are already doing something... Slow down!', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("CONCENTRATE", 'You are already doing something... Slow down!', 3500, "error")
+        end   
+    end
 end)
 
 RegisterNetEvent('mz-lumberjack:client:BagMulchMinigame')
@@ -495,6 +533,7 @@ function BagMulchMinigame(source)
             })
         end
     end, function()
+        baggingmulch = false
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('You tear a hole in the bag... Nice work...', "error", 3500)
         elseif Config.NotifyType == "okok" then
@@ -524,12 +563,12 @@ function BagMulchProcess()
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
+        baggingmulch = false 
         TriggerServerEvent("mz-lumberjack:server:GetBaggedMulch")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
-        craftcheck = false
     end, function() -- Cancel
-        openingDoor = false
+        baggingmulch = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
@@ -565,9 +604,10 @@ end)
 
 RegisterNetEvent('mz-lumberjack:client:ProcessWoodWedge')
 AddEventHandler('mz-lumberjack:client:ProcessWoodWedge', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
+    if not woodwedgeprocess then 
+        if QBCore.Functions.HasItem("woodwedge") then
             TriggerServerEvent("mz-lumberjack:server:ProcessWoodWedge")
+            woodwedgeprocess = true
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["woodwedge"]["name"], image = QBCore.Shared.Items["woodwedge"]["image"]}, 
@@ -581,7 +621,13 @@ AddEventHandler('mz-lumberjack:client:ProcessWoodWedge', function()
             Wait(3000)
             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
         end
-    end, {"woodwedge"})
+    else
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You are already doing something... Slow down!', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("CONCENTRATE", 'You are already doing something... Slow down!', 3500, "error")
+        end   
+    end
 end)
 
 RegisterNetEvent('mz-lumberjack:client:ProcessWoodWedgeMinigame')
@@ -631,6 +677,7 @@ function ProcessWoodWedgeMinigame(source)
             })
         end
     end, function()
+            woodwedgeprocess = false
             if Config.NotifyType == 'qb' then
                 QBCore.Functions.Notify('Your hand slips and the wedges are ruined...', "error", 3500)
             elseif Config.NotifyType == "okok" then
@@ -660,12 +707,12 @@ function ProcessWoodWedgeProcess()
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
+        woodwedgeprocess = false
         TriggerServerEvent("mz-lumberjack:server:GetPlanks")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
-        craftcheck = false
     end, function() -- Cancel
-        openingDoor = false
+        woodwedgeprocess = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
@@ -701,9 +748,10 @@ end)
 
 RegisterNetEvent('mz-lumberjack:client:ProcessThinLogs')
 AddEventHandler('mz-lumberjack:client:ProcessThinLogs', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
+    if not thinlogprocess then 
+        if QBCore.Functions.HasItem("thinlog") then
             TriggerServerEvent("mz-lumberjack:server:ProcessThinLogs")
+            thinlogprocess = true
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["thinlog"]["name"], image = QBCore.Shared.Items["thinlog"]["image"]}, 
@@ -717,7 +765,13 @@ AddEventHandler('mz-lumberjack:client:ProcessThinLogs', function()
             Wait(3000)
             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
         end
-    end, {"thinlog"})
+    else
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You are already doing something... Slow down!', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("CONCENTRATE", 'You are already doing something... Slow down!', 3500, "error")
+        end
+    end   
 end)
 
 RegisterNetEvent('mz-lumberjack:client:ProcessThinLogsMinigame')
@@ -767,6 +821,7 @@ function ProcessThinLogsMinigame(source)
             })
         end
     end, function()
+            thinlogprocess = false
             if Config.NotifyType == 'qb' then
                 QBCore.Functions.Notify('You cut too deep and ruin the thing logs...', "error", 3500)
             elseif Config.NotifyType == "okok" then
@@ -796,12 +851,12 @@ function ProcessThinLogsProcess()
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
+        thinlogprocess = false
         TriggerServerEvent("mz-lumberjack:server:GetThinPlanks")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
-        craftcheck = false
     end, function() -- Cancel
-        openingDoor = false
+        thinlogprocess = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
@@ -837,9 +892,10 @@ end)
 
 RegisterNetEvent('mz-lumberjack:client:ProcessMidLogs')
 AddEventHandler('mz-lumberjack:client:ProcessMidLogs', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
+    if not midlogprocess then 
+        if QBCore.Functions.HasItem("midlog") then
             TriggerServerEvent("mz-lumberjack:server:ProcessMidLogs")
+            midlogprocess = true
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["midlog"]["name"], image = QBCore.Shared.Items["midlog"]["image"]}, 
@@ -853,7 +909,13 @@ AddEventHandler('mz-lumberjack:client:ProcessMidLogs', function()
             Wait(3000)
             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
         end
-    end, {"midlog"})
+    else
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You are already doing something... Slow down!', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("CONCENTRATE", 'You are already doing something... Slow down!', 3500, "error")
+        end   
+    end
 end)
 
 RegisterNetEvent('mz-lumberjack:client:ProcessMidLogsMinigame')
@@ -903,6 +965,7 @@ function ProcessMidLogsMinigame(source)
             })
         end
     end, function()
+            midlogprocess = false
             if Config.NotifyType == 'qb' then
                 QBCore.Functions.Notify('You cut too deep and ruin the medium logs...', "error", 3500)
             elseif Config.NotifyType == "okok" then
@@ -932,12 +995,12 @@ function ProcessMediumLogsProcess()
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
+        midlogprocess = false
         TriggerServerEvent("mz-lumberjack:server:GetMediumPlanks")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
-        craftcheck = false
     end, function() -- Cancel
-        openingDoor = false
+        midlogprocess = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
@@ -973,9 +1036,10 @@ end)
 
 RegisterNetEvent('mz-lumberjack:client:ProcessThickLogs')
 AddEventHandler('mz-lumberjack:client:ProcessThickLogs', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
+    if not thicklogprocess then 
+        if QBCore.Functions.HasItem("thicklog") then
             TriggerServerEvent("mz-lumberjack:server:ProcessThickLogs")
+            thicklogprocess = true 
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["thicklog"]["name"], image = QBCore.Shared.Items["thicklog"]["image"]}, 
@@ -989,7 +1053,13 @@ AddEventHandler('mz-lumberjack:client:ProcessThickLogs', function()
             Wait(3000)
             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
         end
-    end, {"thicklog"})
+    else
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You are already doing something... Slow down!', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("CONCENTRATE", 'You are already doing something... Slow down!', 3500, "error")
+        end   
+    end
 end)
 
 RegisterNetEvent('mz-lumberjack:client:ProcessThickLogsMinigame')
@@ -1039,6 +1109,7 @@ function ProcessThickLogsMinigame(source)
             })
         end
     end, function()
+        thicklogprocess = false
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('You cut the logs too deep and ruin them...', "error", 3500)
         elseif Config.NotifyType == "okok" then
@@ -1068,12 +1139,12 @@ function ProcessThickLogsProcess()
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
+        thicklogprocess = false
         TriggerServerEvent("mz-lumberjack:server:GetThickPlanks")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
-        craftcheck = false
     end, function() -- Cancel
-        openingDoor = false
+        thicklogprocess = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
@@ -1109,9 +1180,10 @@ end)
 
 RegisterNetEvent('mz-lumberjack:client:ProcessThickerLogs')
 AddEventHandler('mz-lumberjack:client:ProcessThickerLogs', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
+    if not thickerlogprocess then     
+        if QBCore.Functions.HasItem("thickerlog") then
             TriggerServerEvent("mz-lumberjack:server:ProcessThickerLogs")
+            thickerlogprocess = true 
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["thickerlog"]["name"], image = QBCore.Shared.Items["thickerlog"]["image"]}, 
@@ -1125,7 +1197,13 @@ AddEventHandler('mz-lumberjack:client:ProcessThickerLogs', function()
             Wait(3000)
             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
         end
-    end, {"thickerlog"})
+    else
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You are already doing something... Slow down!', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("CONCENTRATE", 'You are already doing something... Slow down!', 3500, "error")
+        end   
+    end
 end)
 
 RegisterNetEvent('mz-lumberjack:client:ProcessThickerLogsMinigame')
@@ -1175,6 +1253,7 @@ function ProcessThickerLogsMinigame(source)
             })
         end
     end, function()
+        thickerlogprocess = false
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('You cut the logs too deep and ruin them...', "error", 3500)
         elseif Config.NotifyType == "okok" then
@@ -1204,12 +1283,12 @@ function ProcessThickerLogsProcess()
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
+        thickerlogprocess = false
         TriggerServerEvent("mz-lumberjack:server:GetThickerPlanks")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
-        craftcheck = false
     end, function() -- Cancel
-        openingDoor = false
+        thickerlogprocess = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
@@ -1245,9 +1324,25 @@ end)
 
 RegisterNetEvent('mz-lumberjack:client:MakePallet')
 AddEventHandler('mz-lumberjack:client:MakePallet', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
-            TriggerServerEvent("mz-lumberjack:server:MakePallet")
+    if not makepalletprocess then 
+        if QBCore.Functions.HasItem("rustynails") then
+            if QBCore.Functions.HasItem("woodenplanks") then
+                TriggerServerEvent("mz-lumberjack:server:MakePallet")
+                makepalletprocess = true
+            else
+                local requiredItems = {
+                    [1] = {name = QBCore.Shared.Items["woodenplanks"]["name"], image = QBCore.Shared.Items["woodenplanks"]["image"]}, 
+                    [2] = {name = QBCore.Shared.Items["rustynails"]["name"], image = QBCore.Shared.Items["rustynails"]["image"]}, 
+                }  
+                if Config.NotifyType == 'qb' then
+                    QBCore.Functions.Notify('You need some planks and nails...', "error", 3500)
+                elseif Config.NotifyType == "okok" then
+                    exports['okokNotify']:Alert("NEED PLANKS AND NAILS", "You need some planks and nails...", 3500, "error")
+                end   
+                TriggerEvent('inventory:client:requiredItems', requiredItems, true)
+                Wait(3000)
+                TriggerEvent('inventory:client:requiredItems', requiredItems, false)
+            end
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["woodenplanks"]["name"], image = QBCore.Shared.Items["woodenplanks"]["image"]}, 
@@ -1262,7 +1357,13 @@ AddEventHandler('mz-lumberjack:client:MakePallet', function()
             Wait(3000)
             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
         end
-    end, {"woodenplanks", "rustynails"})
+    else
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You are already doing something... Slow down!', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("CONCENTRATE", 'You are already doing something... Slow down!', 3500, "error")
+        end   
+    end    
 end)
 
 RegisterNetEvent('mz-lumberjack:client:MakePalletMinigame')
@@ -1312,6 +1413,7 @@ function MakePalletMinigame(source)
             })
         end
     end, function()
+        makepalletprocess = false
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('You bash through the wooden plank and drop your nails...', "error", 3500)
         elseif Config.NotifyType == "okok" then
@@ -1344,9 +1446,9 @@ function MakePalletProcess()
         TriggerServerEvent("mz-lumberjack:server:GetPallet")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
-        craftcheck = false
+        makepalletprocess = false
     end, function() -- Cancel
-        openingDoor = false
+        makepalletprocess = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
@@ -1382,9 +1484,10 @@ end)
 
 RegisterNetEvent('mz-lumberjack:client:MakeMulchBags')
 AddEventHandler('mz-lumberjack:client:MakeMulchBags', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
+    if not makemulchbagprocess then 
+        if QBCore.Functions.HasItem("plastic") then
             TriggerServerEvent("mz-lumberjack:server:MakeMulchBags")
+            makemulchbagprocess = true
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["plastic"]["name"], image = QBCore.Shared.Items["plastic"]["image"]}, 
@@ -1398,7 +1501,13 @@ AddEventHandler('mz-lumberjack:client:MakeMulchBags', function()
             Wait(3000)
             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
         end
-    end, {"plastic"})
+    else
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You are already doing something... Slow down!', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("CONCENTRATE", 'You are already doing something... Slow down!', 3500, "error")
+        end   
+    end
 end)
 
 RegisterNetEvent('mz-lumberjack:client:MakeMulchBagsMinigame')
@@ -1448,6 +1557,7 @@ function MakeMulchBagsMinigame(source)
             })
         end
     end, function()
+            makemulchbagprocess = false
             if Config.NotifyType == 'qb' then
                 QBCore.Functions.Notify('Your hand slips and you tear through the plastic...', "error", 3500)
             elseif Config.NotifyType == "okok" then
@@ -1480,9 +1590,9 @@ function BreakBottlesProcess()
         TriggerServerEvent("mz-lumberjack:server:GetMulchBag")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
-        craftcheck = false
+        makemulchbagprocess = false
     end, function() -- Cancel
-        openingDoor = false
+        makemulchbagprocess = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
