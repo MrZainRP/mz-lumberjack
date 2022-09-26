@@ -379,6 +379,7 @@ function MulchBarkMinigame(source)
        elseif Config.NotifyType == "okok" then
            exports['okokNotify']:Alert("BARK RUINED", "The bark breaks into unuseable pieces...", 3500, "error")
        end
+       treebarkprocess = false
        Wait(500)
        local deteriorate = -Config.mulchXPloss
        exports["mz-skills"]:UpdateSkill("Lumberjack", deteriorate)
@@ -406,9 +407,9 @@ function MulchBarkProcess()
         TriggerServerEvent("mz-lumberjack:server:GetMulch")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
-        craftcheck = false
+        treebarkprocess = false
     end, function() -- Cancel
-        openingDoor = false
+        treebarkprocess = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
