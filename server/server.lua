@@ -153,6 +153,7 @@ end)
 RegisterServerEvent('mz-lumberjack:lumberPayoutlvl4', function()
     local source = source
     local Player = QBCore.Functions.GetPlayer(tonumber(source))
+    local chance = math.random(1, 100)
     if chance <= 30 then 
         Player.Functions.AddItem('treebark', 1)
         TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['treebark'], "add", 1)
@@ -174,6 +175,7 @@ end)
 RegisterServerEvent('mz-lumberjack:lumberPayoutlvl5', function()
     local source = source
     local Player = QBCore.Functions.GetPlayer(tonumber(source))
+    local chance = math.random(1, 100)
     if chance <= 20 then 
         Player.Functions.AddItem('treebark', 1)
         TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['treebark'], "add", 1)
@@ -195,6 +197,7 @@ end)
 RegisterServerEvent('mz-lumberjack:lumberPayoutlvl6', function()
     local source = source
     local Player = QBCore.Functions.GetPlayer(tonumber(source))
+    local chance = math.random(1, 100)
     if chance <= 10 then 
         Player.Functions.AddItem('treebark', 1)
         TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['treebark'], "add", 1)
@@ -216,6 +219,7 @@ end)
 RegisterServerEvent('mz-lumberjack:lumberPayoutlvl7', function()
     local source = source
     local Player = QBCore.Functions.GetPlayer(tonumber(source))
+    local chance = math.random(1, 100)
     local betteroutput = math.random(1, 2)
     if chance <= 10 then 
         Player.Functions.AddItem('treebark', betteroutput)
@@ -238,6 +242,7 @@ end)
 RegisterServerEvent('mz-lumberjack:lumberPayoutlvl8', function()
     local source = source
     local Player = QBCore.Functions.GetPlayer(tonumber(source))
+    local chance = math.random(1, 100)
     local betteroutput = math.random(1, 2)
     if chance <= 10 then 
         Player.Functions.AddItem('treebark', betteroutput)
