@@ -304,7 +304,6 @@ AddEventHandler('mz-lumberjack:client:MulchBark', function()
     if not treebarkprocess then 
         if QBCore.Functions.HasItem("treebark") then
             TriggerServerEvent("mz-lumberjack:server:MulchBark")
-            treebarkprocess = true 
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["treebark"]["name"], image = QBCore.Shared.Items["treebark"]["image"]}, 
@@ -330,6 +329,7 @@ end)
 RegisterNetEvent('mz-lumberjack:client:MulchBarkMinigame')
 AddEventHandler('mz-lumberjack:client:MulchBarkMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic3"})
+    treebarkprocess = true
     MulchBarkMinigame(source)
 end)
 
@@ -379,7 +379,6 @@ function MulchBarkMinigame(source)
        elseif Config.NotifyType == "okok" then
            exports['okokNotify']:Alert("BARK RUINED", "The bark breaks into unuseable pieces...", 3500, "error")
        end
-       treebarkprocess = false
        Wait(500)
        local deteriorate = -Config.mulchXPloss
        exports["mz-skills"]:UpdateSkill("Lumberjack", deteriorate)
@@ -407,9 +406,9 @@ function MulchBarkProcess()
         TriggerServerEvent("mz-lumberjack:server:GetMulch")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
-        treebarkprocess = false
+        craftcheck = false
     end, function() -- Cancel
-        treebarkprocess = false
+        openingDoor = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
@@ -448,7 +447,6 @@ AddEventHandler('mz-lumberjack:client:BagMulch', function()
     if not baggingmulch then 
         if QBCore.Functions.HasItem("treemulch") then
             if QBCore.Functions.HasItem("emptymulchbag") then
-                baggingmulch = true 
                 TriggerServerEvent("mz-lumberjack:server:BagMulch")
             else
                 local requiredItems = {
@@ -490,6 +488,7 @@ end)
 RegisterNetEvent('mz-lumberjack:client:BagMulchMinigame')
 AddEventHandler('mz-lumberjack:client:BagMulchMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic3"})
+    baggingmulch = true 
     BagMulchMinigame(source)
 end)
 
@@ -608,7 +607,6 @@ AddEventHandler('mz-lumberjack:client:ProcessWoodWedge', function()
     if not woodwedgeprocess then 
         if QBCore.Functions.HasItem("woodwedge") then
             TriggerServerEvent("mz-lumberjack:server:ProcessWoodWedge")
-            woodwedgeprocess = true
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["woodwedge"]["name"], image = QBCore.Shared.Items["woodwedge"]["image"]}, 
@@ -634,6 +632,7 @@ end)
 RegisterNetEvent('mz-lumberjack:client:ProcessWoodWedgeMinigame')
 AddEventHandler('mz-lumberjack:client:ProcessWoodWedgeMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
+    woodwedgeprocess = true
     ProcessWoodWedgeMinigame(source)
 end)
 
@@ -752,7 +751,6 @@ AddEventHandler('mz-lumberjack:client:ProcessThinLogs', function()
     if not thinlogprocess then 
         if QBCore.Functions.HasItem("thinlog") then
             TriggerServerEvent("mz-lumberjack:server:ProcessThinLogs")
-            thinlogprocess = true
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["thinlog"]["name"], image = QBCore.Shared.Items["thinlog"]["image"]}, 
@@ -778,6 +776,7 @@ end)
 RegisterNetEvent('mz-lumberjack:client:ProcessThinLogsMinigame')
 AddEventHandler('mz-lumberjack:client:ProcessThinLogsMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
+    thinlogprocess = true
     ProcessThinLogsMinigame(source)
 end)
 
@@ -896,7 +895,6 @@ AddEventHandler('mz-lumberjack:client:ProcessMidLogs', function()
     if not midlogprocess then 
         if QBCore.Functions.HasItem("midlog") then
             TriggerServerEvent("mz-lumberjack:server:ProcessMidLogs")
-            midlogprocess = true
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["midlog"]["name"], image = QBCore.Shared.Items["midlog"]["image"]}, 
@@ -922,6 +920,7 @@ end)
 RegisterNetEvent('mz-lumberjack:client:ProcessMidLogsMinigame')
 AddEventHandler('mz-lumberjack:client:ProcessMidLogsMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
+    midlogprocess = true
     ProcessMidLogsMinigame(source)
 end)
 
@@ -1040,7 +1039,6 @@ AddEventHandler('mz-lumberjack:client:ProcessThickLogs', function()
     if not thicklogprocess then 
         if QBCore.Functions.HasItem("thicklog") then
             TriggerServerEvent("mz-lumberjack:server:ProcessThickLogs")
-            thicklogprocess = true 
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["thicklog"]["name"], image = QBCore.Shared.Items["thicklog"]["image"]}, 
@@ -1066,6 +1064,7 @@ end)
 RegisterNetEvent('mz-lumberjack:client:ProcessThickLogsMinigame')
 AddEventHandler('mz-lumberjack:client:ProcessThickLogsMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
+    thicklogprocess = true 
     ProcessThickLogsMinigame(source)
 end)
 
@@ -1184,7 +1183,6 @@ AddEventHandler('mz-lumberjack:client:ProcessThickerLogs', function()
     if not thickerlogprocess then     
         if QBCore.Functions.HasItem("thickerlog") then
             TriggerServerEvent("mz-lumberjack:server:ProcessThickerLogs")
-            thickerlogprocess = true 
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["thickerlog"]["name"], image = QBCore.Shared.Items["thickerlog"]["image"]}, 
@@ -1210,6 +1208,7 @@ end)
 RegisterNetEvent('mz-lumberjack:client:ProcessThickerLogsMinigame')
 AddEventHandler('mz-lumberjack:client:ProcessThickerLogsMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
+    thickerlogprocess = true 
     ProcessThickerLogsMinigame(source)
 end)
 
@@ -1329,7 +1328,6 @@ AddEventHandler('mz-lumberjack:client:MakePallet', function()
         if QBCore.Functions.HasItem("rustynails") then
             if QBCore.Functions.HasItem("woodenplanks") then
                 TriggerServerEvent("mz-lumberjack:server:MakePallet")
-                makepalletprocess = true
             else
                 local requiredItems = {
                     [1] = {name = QBCore.Shared.Items["woodenplanks"]["name"], image = QBCore.Shared.Items["woodenplanks"]["image"]}, 
@@ -1370,6 +1368,7 @@ end)
 RegisterNetEvent('mz-lumberjack:client:MakePalletMinigame')
 AddEventHandler('mz-lumberjack:client:MakePalletMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"hammer"})
+    makepalletprocess = true
     MakePalletMinigame(source)
 end)
 
@@ -1488,7 +1487,6 @@ AddEventHandler('mz-lumberjack:client:MakeMulchBags', function()
     if not makemulchbagprocess then 
         if QBCore.Functions.HasItem("plastic") then
             TriggerServerEvent("mz-lumberjack:server:MakeMulchBags")
-            makemulchbagprocess = true
         else
             local requiredItems = {
                 [1] = {name = QBCore.Shared.Items["plastic"]["name"], image = QBCore.Shared.Items["plastic"]["image"]}, 
@@ -1514,6 +1512,7 @@ end)
 RegisterNetEvent('mz-lumberjack:client:MakeMulchBagsMinigame')
 AddEventHandler('mz-lumberjack:client:MakeMulchBagsMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic4"})
+    makemulchbagprocess = true
     MakeMulchBagsMinigame(source)
 end)
 
