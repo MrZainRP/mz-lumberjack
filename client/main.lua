@@ -406,9 +406,9 @@ function MulchBarkProcess()
         TriggerServerEvent("mz-lumberjack:server:GetMulch")
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
-        craftcheck = false
+        treebarkprocess = false
     end, function() -- Cancel
-        openingDoor = false
+        treebarkprocess = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
