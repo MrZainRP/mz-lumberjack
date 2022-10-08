@@ -386,7 +386,8 @@ function MulchBarkMinigame(source)
            QBCore.Functions.Notify('-'..Config.mulchXPloss.. 'XP to Lumberjack', "error", 3500)
        elseif Config.NotifyType == "okok" then
            exports['okokNotify']:Alert("SKILLS", '-'..Config.mulchXPloss.. 'XP to Lumberjack', 3500, "error")
-       end   
+       end
+       treebarkprocess = false
        FailedAttemps = 0
        SucceededAttempts = 0
        NeededAttempts = 0
@@ -533,7 +534,6 @@ function BagMulchMinigame(source)
             })
         end
     end, function()
-        baggingmulch = false
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('You tear a hole in the bag... Nice work...', "error", 3500)
         elseif Config.NotifyType == "okok" then
@@ -547,6 +547,7 @@ function BagMulchMinigame(source)
         elseif Config.NotifyType == "okok" then
             exports['okokNotify']:Alert("SKILLS", '-'..Config.bagmulchXPloss.. 'XP to Lumberjack', 3500, "error")
         end  
+        baggingmulch = false
         FailedAttemps = 0
         SucceededAttempts = 0
         NeededAttempts = 0
