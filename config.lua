@@ -6,25 +6,42 @@ Config = Config or {}
 
 Config.NotifyType = 'okok'              -- notification type: 'qb' for qb-core standard notifications, 'okok' for okokNotify notifications
 
+Config.mzskills = true                  -- Set to "false" to disable mz-skills
+-- if "Config.mzskills = true", then the following parameters apply:
+Config.LumberSkill = "Lumberjack"
+Config.LumberLevel0 = 0
+Config.LumberLevel1 = 100
+Config.LumberLevel2 = 200
+Config.LumberLevel3 = 400
+Config.LumberLevel4 = 800
+Config.LumberLevel5 = 1600
+Config.LumberLevel6 = 3200
+Config.LumberLevel7 = 16400
+Config.LumberLevel8 = 32800
+
+-- Set this to "true" if you want to enable a processing lumber skill check (a different skill check applies for chopping wood) 
+Config.ProcessMaterialCheck = true      -- Set to "false" to disable progressbar mini-game when processing various wood products.
+
 ---------------
 --TREE SET UP--
 ---------------
 
-Config.Choptime = 20                    -- Time (in seconds) to cut tree (with 2 loot parses). Do not change unless you are also going to change how the resource loots.
+Config.Choptime = 10                    -- Time (in seconds) to cut tree (with 2 loot parses). Do not change unless you are also going to change how the resource loots.
 
-Config.Timeout = 5 * (60 * 1000)        -- Time (in minutes) that it takes for trees to regenerate.
+Config.Timeout = 2 * (60 * 1000)        -- Time (in minutes) that it takes for trees to regenerate.
 
 --------------------------------
 --SKILLCHECK FOR TREE CHOPPING--
 --------------------------------
 
+-- Set this to "true" if you want to enable a skill check for chopping wood (a different skill check applies for processing lumber products)
 Config.Axeskillcheck = false            -- Change to "false" if you do not want to have a skillcheck before cutting down a tree.
---If the above is set to "true", the following parameters apply:
-Config.lowparse = 1                    
-Config.highparse = 2
-Config.parsetimelow = 10
-Config.parsetimehigh = 14
-Config.skillfailXP = 1
+--If "Config.Axeskillcheck" = true", then the following parameters apply:
+Config.lowparse = 1                     -- Lowest number of skillcheck parses per wood chop.
+Config.highparse = 2                    -- Highest number of skillcheck parses per wood chop.
+Config.parsetimelow = 10                -- Lowest parse time per wood chop skill check.
+Config.parsetimehigh = 14               -- Highest parse time per wood chop skill check.
+Config.skillfailXP = 1                  -- amount of mz-skill (default is "Lumberjack") lost if skillcheck fails.
 
 ----------------------
 --AXE CONFIGURATIONS--
@@ -34,9 +51,193 @@ Config.Axe = {
     [`weapon_battleaxe`] = {}
 }
 
-Config.Axebreak = true -- Change to "false" if you do not want the axe to break.
+Config.Axebreak = true                  -- Change to "false" if you do not want a chance for the axe to break.
 
-Config.Axebreakchance = 1 -- Chance for the axe to break (in percentage, e.g. 1 = 1%)
+Config.Axebreakchance = 1               -- Chance for the axe to break (in percentage, e.g. 1 = 1%)
+
+------------
+--CRAFTING--
+------------
+
+--------------
+--MULCH BARK--
+--------------
+Config.BarkAmount = 5                   -- Amount of bark needed to start creating wooden mulch
+-- if "Config.ProcessMaterialCheck = true", then the following parameters apply:
+Config.barklow = 5                      -- Lowest number of skillbar parses to mulch tree bark
+Config.barkhigh = 7                     -- Highest number of skillbar parses to mulch tree bark
+-- mz-skill functions:
+Config.mulchXPlow = 1                   -- Lowest amount of "Lumberjack" XP awarded for successful mulch
+Config.mulchXPhigh = 3                  -- Highest amount of "Lumberjack" XP awarded for successful mulch
+Config.mulchXPloss = 2                  -- Amount of XP lost for failing skillbar to mulch tree bark
+-- progressBar functions:
+Config.mulchtimelow = 10                -- Lowest time to process mulch.
+Config.mulchtimehigh = 15               -- Highest time to process mulch.
+-- Returns:
+Config.mulchreturnlow = 1               -- Lowest mulch return.
+Config.mulchreturnhigh = 2              -- Highest mulch return.
+
+-------------
+--BAG MULCH--
+-------------
+Config.mulchamount = 5                  -- Amount of bark needed to start bagging mulch
+-- if "Config.ProcessMaterialCheck = true", then the following parameters apply:
+Config.mulchlow = 5                     -- Lowest number of skillbar parses to bag mulch
+Config.mulchhigh = 7                    -- Highest number of skillbar parses to bag mulch
+-- mz-skill functions:
+Config.bagmulchXPlow = 1                -- Lowest amount of "Lumberjack" XP awarded to bag mulch
+Config.bagmulchXPhigh = 3               -- Highest amount of "Lumberjack" XP awarded to bag mulch
+Config.bagmulchXPloss = 2               -- Amount of XP lost for failing skillbar to bag mulch
+-- progressBar functions:
+Config.bagmulchtimelow = 10             -- Lowest time to process mulch.
+Config.bagmulchtimehigh = 15            -- Highest time to process mulch.
+-- Returns:
+Config.bagmulchreturn = 1               -- Lowest mulch return.
+
+-------------------------
+--PROCESS WOODEN WEDGES--
+-------------------------
+Config.wedgeamount = 8                  -- Amount of wedges needed.
+-- if "Config.ProcessMaterialCheck = true", then the following parameters apply:
+Config.wedgelow = 5                     -- Lowest number of skillbar parses to process wedges.
+Config.wedgehigh = 7                    -- Highest number of skillbar parses to process wedges.
+-- mz-skill functions:
+Config.wedgeXPlow = 1                   -- Lowest amount of "Lumberjack" XP awarded to process wedges.
+Config.wedgeXPhigh = 3                  -- Highest amount of "Lumberjack" XP awarded to process wedges.
+Config.wedgeXPloss = 2                  -- Amount of XP lost for failing skillbar to process wedges.
+-- progressBar functions:
+Config.wedgetimelow = 10                -- Lowest time to process wedges.
+Config.wedgetimehigh = 15               -- Highest time to process wedges.
+-- Returns:
+Config.wedgereturnlow = 1               -- Lowest wedge return.
+Config.wedgereturnhigh = 2              -- Highest wedge return.
+
+---------------------
+--PROCESS THIN LOGS--
+---------------------
+Config.thinamount = 6                   -- Amount of thin logs needed.
+-- if "Config.ProcessMaterialCheck = true", then the following parameters apply:
+Config.thinlow = 5                      -- Lowest number of skillbar parses to process thin logs.
+Config.thinhigh = 7                     -- Highest number of skillbar parses to process thin logs.
+-- mz-skill functions:
+Config.thinXPlow = 1                    -- Lowest amount of "Lumberjack" XP awarded to process thin logs.
+Config.thinXPhigh = 5                   -- Highest amount of "Lumberjack" XP awarded to process thin logs.
+Config.thinXPloss = 3                   -- Amount of XP lost for failing skillbar to process thin logs.
+-- progressBar functions:
+Config.thintimelow = 10                 -- Lowest time to process thin logs.
+Config.thintimehigh = 15                -- Highest time to process thin logs.
+-- Returns:
+Config.thinreturnlow = 2                -- Lowest thin logs return.
+Config.thinreturnhigh = 3               -- Highest thin log return.
+
+--------------------
+--PROCESS MID LOGS--
+--------------------
+Config.midamount = 4                    -- Amount of mid logs needed.
+-- if "Config.ProcessMaterialCheck = true", then the following parameters apply:
+Config.midlow = 5                       -- Lowest number of skillbar parses to process mid logs.
+Config.midhigh = 7                      -- Highest number of skillbar parses to process mid logs.
+-- mz-skill functions:
+Config.midXPlow = 1                     -- Lowest amount of "Lumberjack" XP awarded to process mid logs.
+Config.midXPhigh = 7                    -- Highest amount of "Lumberjack" XP awarded to process mid logs.
+Config.midXPloss = 4                    -- Amount of XP lost for failing skillbar to process mid logs.
+-- progressBar functions:
+Config.midtimelow = 10                  -- Lowest time to process mid logs.
+Config.midtimehigh = 15                 -- Highest time to process mid logs.
+-- Returns:
+Config.midreturnlow = 3                 -- Lowest thin mid return.
+Config.midreturnhigh = 5                -- Highest thin mid return.
+
+----------------------
+--PROCESS THICK LOGS--
+----------------------
+Config.thickamount = 2                  -- Amount of thick logs needed.
+-- if "Config.ProcessMaterialCheck = true", then the following parameters apply:
+Config.thicklow = 5                     -- Lowest number of skillbar parses to process thick logs.
+Config.thickhigh = 7                    -- Highest number of skillbar parses to process thick logs.
+-- mz-skill functions:
+Config.thickXPlow = 1                   -- Lowest amount of "Lumberjack" XP awarded to process thick logs.
+Config.thickXPhigh = 10                 -- Highest amount of "Lumberjack" XP awarded to process thick logs.
+Config.thickXPloss = 5                  -- Amount of XP lost for failing skillbar to process thick logs.
+-- progressBar functions:
+Config.thicktimelow = 10                -- Lowest time to process thick logs.
+Config.thicktimehigh = 15               -- Highest time to process thick logs.
+-- Returns:
+Config.thickreturnlow = 4               -- Lowest thin thick return.
+Config.thickreturnhigh = 7              -- Highest thin thick return.
+
+------------------------
+--PROCESS THICKER LOGS--
+------------------------
+Config.thickeramount = 2                -- Amount of thicker logs needed.
+-- if "Config.ProcessMaterialCheck = true", then the following parameters apply:
+Config.thickerlow = 5                   -- Lowest number of skillbar parses to process thicker logs.
+Config.thickerhigh = 7                  -- Highest number of skillbar parses to process thicker logs.
+-- mz-skill functions:
+Config.thickerXPlow = 1                 -- Lowest amount of "Lumberjack" XP awarded to process thicker logs.
+Config.thickerXPhigh = 10               -- Highest amount of "Lumberjack" XP awarded to process thicker logs.
+Config.thickerXPloss = 5                -- Amount of XP lost for failing skillbar to process thicker logs.
+-- progressBar functions:
+Config.thickertimelow = 10              -- Lowest time to process thicker logs.
+Config.thickertimehigh = 15             -- Highest time to process thicker logs.
+-- Returns:
+Config.thickerreturnlow = 6             -- Lowest thin thicker return.
+Config.thickerreturnhigh = 10           -- Highest thin thicker return.
+
+-------------------
+--MAKE MULCH BAGS--
+-------------------
+Config.plasticneeded = 5                -- Amount of planks needed to make a mulch bag.
+-- if "Config.ProcessMaterialCheck = true", then the following parameters apply:
+Config.plasticlow = 5                   -- Lowest number of skillbar parses to make a mulch bag.
+Config.plastichigh = 7                  -- Highest number of skillbar parses to make a mulch bag.
+-- mz-skill functions:
+Config.plasticXPlow = 1                 -- Lowest amount of "Lumberjack" XP awarded to make a mulch bag.
+Config.plasticXPhigh = 1                -- Highest amount of "Lumberjack" XP awarded to make a mulch bag.
+Config.plasticXPloss = 1                -- Amount of XP lost for failing skillbar to make a mulch bag.
+-- progressBar functions:
+Config.plastictimelow = 10              -- Lowest time to make a mulch bag.
+Config.plastictimehigh = 15             -- Highest time to make a mulch bag.
+-- Returns:
+Config.plasticoutput = 1                -- Mulch bag output
+
+----------------
+--MAKE PALLETS--
+----------------
+Config.planksneeded = 3                 -- Amount of planks needed to make a pallet.
+-- if "Config.ProcessMaterialCheck = true", then the following parameters apply:
+Config.nailsneeded = 5                  -- Amount of rusty nails needed to make a pallet.
+Config.palletlow = 5                    -- Lowest number of skillbar parses to make a pallet.
+Config.pallethigh = 7                   -- Highest number of skillbar parses to make a pallet.
+-- mz-skill functions:
+Config.palletXPlow = 1                  -- Lowest amount of "Lumberjack" XP awarded to make a pallet.
+Config.palletXPhigh = 10                -- Highest amount of "Lumberjack" XP awarded to make a pallet.
+Config.palletXPloss = 5                 -- Amount of XP lost for failing skillbar to make a pallet.
+-- progressBar functions:
+Config.pallettimelow = 10               -- Lowest time to make a pallet.
+Config.pallettimehigh = 15              -- Highest time to make a pallet.
+-- Returns:
+Config.palletoutput = 1                 -- Pallet output
+
+----------------
+--SELL RETURNS--
+----------------
+
+Config.LumberItems = { -- Items capable of being sold for $ (Add whatever items you want players to be able to sell here in the same format)
+    [1] = {
+        item = "woodenplanks",
+        price = 250
+    },
+    [2] = {
+        item = "mulchbag",
+        price = 650
+    },
+    [3] = {
+        item = "woodenpallet",
+        price = 2500
+    },
+}
+
 
 ---------
 --BLIPS--
@@ -68,156 +269,19 @@ Config.SellLocation = { -- Blip Location of wholesale hardware purchaser of lumb
         },
     }
 
-------------
---CRAFTING--
-------------
 
---------------
---MULCH BARK--
---------------
-Config.BarkAmount = 5                   -- Amount of bark needed to start creating wooden mulch
-Config.barklow = 5                      -- Lowest number of skillbar parses to mulch tree bark
-Config.barkhigh = 7                     -- Highest number of skillbar parses to mulch tree bark
-Config.mulchXPlow = 1                   -- Lowest amount of "Lumberjack" XP awarded for successful mulch
-Config.mulchXPhigh = 3                  -- Highest amount of "Lumberjack" XP awarded for successful mulch
-Config.mulchXPloss = 2                  -- Amount of XP lost for failing skillbar to mulch tree bark
-Config.mulchtimelow = 10                -- Lowest time to process mulch.
-Config.mulchtimehigh = 15               -- Highest time to process mulch.
-Config.mulchreturnlow = 1               -- Lowest mulch return.
-Config.mulchreturnhigh = 2              -- Highest mulch return.
-
--------------
---BAG MULCH--
--------------
-
-Config.mulchamount = 5                  -- Amount of bark needed to start bagging mulch
-Config.mulchlow = 5                     -- Lowest number of skillbar parses to bag mulch
-Config.mulchhigh = 7                    -- Highest number of skillbar parses to bag mulch
-Config.bagmulchXPlow = 1                -- Lowest amount of "Lumberjack" XP awarded to bag mulch
-Config.bagmulchXPhigh = 3               -- Highest amount of "Lumberjack" XP awarded to bag mulch
-Config.bagmulchXPloss = 2               -- Amount of XP lost for failing skillbar to bag mulch
-Config.bagmulchtimelow = 10             -- Lowest time to process mulch.
-Config.bagmulchtimehigh = 15            -- Highest time to process mulch.
-Config.bagmulchreturn = 1               -- Lowest mulch return.
-
--------------------------
---PROCESS WOODEN WEDGES--
--------------------------
-
-Config.wedgeamount = 8                  -- Amount of wedges needed.
-Config.wedgelow = 5                     -- Lowest number of skillbar parses to process wedges.
-Config.wedgehigh = 7                    -- Highest number of skillbar parses to process wedges.
-Config.wedgeXPlow = 1                   -- Lowest amount of "Lumberjack" XP awarded to process wedges.
-Config.wedgeXPhigh = 3                  -- Highest amount of "Lumberjack" XP awarded to process wedges.
-Config.wedgeXPloss = 2                  -- Amount of XP lost for failing skillbar to process wedges.
-Config.wedgetimelow = 10                -- Lowest time to process wedges.
-Config.wedgetimehigh = 15               -- Highest time to process wedges.
-Config.wedgereturnlow = 1               -- Lowest wedge return.
-Config.wedgereturnhigh = 2              -- Highest wedge return.
-
----------------------
---PROCESS THIN LOGS--
----------------------
-
-Config.thinamount = 6                   -- Amount of thin logs needed.
-Config.thinlow = 5                      -- Lowest number of skillbar parses to process thin logs.
-Config.thinhigh = 7                     -- Highest number of skillbar parses to process thin logs.
-Config.thinXPlow = 1                    -- Lowest amount of "Lumberjack" XP awarded to process thin logs.
-Config.thinXPhigh = 5                   -- Highest amount of "Lumberjack" XP awarded to process thin logs.
-Config.thinXPloss = 3                   -- Amount of XP lost for failing skillbar to process thin logs.
-Config.thintimelow = 10                 -- Lowest time to process thin logs.
-Config.thintimehigh = 15                -- Highest time to process thin logs.
-Config.thinreturnlow = 2                -- Lowest thin logs return.
-Config.thinreturnhigh = 3               -- Highest thin log return.
-
---------------------
---PROCESS MID LOGS--
---------------------
-
-Config.midamount = 4                    -- Amount of mid logs needed.
-Config.midlow = 5                       -- Lowest number of skillbar parses to process mid logs.
-Config.midhigh = 7                      -- Highest number of skillbar parses to process mid logs.
-Config.midXPlow = 1                     -- Lowest amount of "Lumberjack" XP awarded to process mid logs.
-Config.midXPhigh = 7                    -- Highest amount of "Lumberjack" XP awarded to process mid logs.
-Config.midXPloss = 4                    -- Amount of XP lost for failing skillbar to process mid logs.
-Config.midtimelow = 10                  -- Lowest time to process mid logs.
-Config.midtimehigh = 15                 -- Highest time to process mid logs.
-Config.midreturnlow = 3                 -- Lowest thin mid return.
-Config.midreturnhigh = 5                -- Highest thin mid return.
-
-----------------------
---PROCESS THICK LOGS--
-----------------------
-
-Config.thickamount = 2                  -- Amount of thick logs needed.
-Config.thicklow = 5                     -- Lowest number of skillbar parses to process thick logs.
-Config.thickhigh = 7                    -- Highest number of skillbar parses to process thick logs.
-Config.thickXPlow = 1                   -- Lowest amount of "Lumberjack" XP awarded to process thick logs.
-Config.thickXPhigh = 10                 -- Highest amount of "Lumberjack" XP awarded to process thick logs.
-Config.thickXPloss = 5                  -- Amount of XP lost for failing skillbar to process thick logs.
-Config.thicktimelow = 10                -- Lowest time to process thick logs.
-Config.thicktimehigh = 15               -- Highest time to process thick logs.
-Config.thickreturnlow = 4               -- Lowest thin thick return.
-Config.thickreturnhigh = 7              -- Highest thin thick return.
-
-------------------------
---PROCESS THICKER LOGS--
-------------------------
-
-Config.thickeramount = 2                -- Amount of thicker logs needed.
-Config.thickerlow = 5                   -- Lowest number of skillbar parses to process thicker logs.
-Config.thickerhigh = 7                  -- Highest number of skillbar parses to process thicker logs.
-Config.thickerXPlow = 1                 -- Lowest amount of "Lumberjack" XP awarded to process thicker logs.
-Config.thickerXPhigh = 10               -- Highest amount of "Lumberjack" XP awarded to process thicker logs.
-Config.thickerXPloss = 5                -- Amount of XP lost for failing skillbar to process thicker logs.
-Config.thickertimelow = 10              -- Lowest time to process thicker logs.
-Config.thickertimehigh = 15             -- Highest time to process thicker logs.
-Config.thickerreturnlow = 6             -- Lowest thin thicker return.
-Config.thickerreturnhigh = 10           -- Highest thin thicker return.
-
--------------------
---MAKE MULCH BAGS--
--------------------
-
-Config.plasticneeded = 5                -- Amount of planks needed to make a mulch bag.
-Config.plasticlow = 5                   -- Lowest number of skillbar parses to make a mulch bag.
-Config.plastichigh = 7                  -- Highest number of skillbar parses to make a mulch bag.
-Config.plasticXPlow = 1                 -- Lowest amount of "Lumberjack" XP awarded to make a mulch bag.
-Config.plasticXPhigh = 1                -- Highest amount of "Lumberjack" XP awarded to make a mulch bag.
-Config.plasticXPloss = 1                -- Amount of XP lost for failing skillbar to make a mulch bag.
-Config.plastictimelow = 10              -- Lowest time to make a mulch bag.
-Config.plastictimehigh = 15             -- Highest time to make a mulch bag.
-Config.plasticoutput = 1                -- Mulch bag output
-
-----------------
---MAKE PALLETS--
-----------------
-
-Config.planksneeded = 3                 -- Amount of planks needed to make a pallet.
-Config.nailsneeded = 5                  -- Amount of rusty nails needed to make a pallet.
-Config.palletlow = 5                    -- Lowest number of skillbar parses to make a pallet.
-Config.pallethigh = 7                   -- Highest number of skillbar parses to make a pallet.
-Config.palletXPlow = 1                  -- Lowest amount of "Lumberjack" XP awarded to make a pallet.
-Config.palletXPhigh = 10                -- Highest amount of "Lumberjack" XP awarded to make a pallet.
-Config.palletXPloss = 5                 -- Amount of XP lost for failing skillbar to make a pallet.
-Config.pallettimelow = 10               -- Lowest time to make a pallet.
-Config.pallettimehigh = 15              -- Highest time to make a pallet.
-Config.palletoutput = 1                 -- Pallet output
-
-Config.LumberItems = { -- Items capable of being sold for $
+Config.ProcessLocation = { -- Blip Location to process lumber and lumber related products.
     [1] = {
-        item = "woodenplanks",
-        price = 200
-    },
-    [2] = {
-        item = "mulchbag",
-        price = 550
-    },
-    [3] = {
-        item = "woodenpallet",
-        price = 2000
-    },
-}
+            coords = vector3(-497.18, 5279.39, 80.61),
+            length = 6.3,
+            width = 2.6,
+            heading = 125,
+            debugPoly = false,
+            minZ = 78.41,
+            maxZ = 82.41,
+            distance = 1.0
+        },
+    }    
 
 Config.TreeLocations = {
     [1] = {

@@ -1,6 +1,6 @@
 ### MZ-LUMBERJACK - a progression (XP) based lumberjack job + crafting for QB-CORE based FiveM servers
 
-Created by Mr_Zain#4139 - inspired by TRClassic#0001's "tr-lumberjack" resource - see: **[tr-lumberjack](https://github.com/trclassic92/tr-lumberjack)**
+Created by Mr_Zain#4139
 
 ## PREVIEW
 
@@ -13,6 +13,16 @@ Created by Mr_Zain#4139 - inspired by TRClassic#0001's "tr-lumberjack" resource 
 - Resmon 0.00 idle - optimised with no range checking
 - Customised to function with qb-core standard notifications + okokNotify notifications
 
+-- v(2.0.0) Changes:
+- All lumber processing occurs at the same place now (making mulch bags is still performed elsewhere); 
+- A blip appears for the lumber processing place (set via config) so that players do not get lost when trying to process lumber and lumber based products;
+- Can now disable the use of mz-skills entirely (rng returns adjusted for no level/skill check);
+- Optional Axe break chance + removal properly configured;
+- if using mz-skills, name of skill + skill gain + amount of XP to advance to the next level can all be set via config;
+- Wood chopping time can be adjusted via config and syncs with animation;
+- Anti-cheat checks added to address exploitation; 
+- Removed obsolete event handlers and cleaned up other elements of code;
+
 ### DEPENDENCIES
 
 NOTE: You should have each of the dependencies other than qb-lock and mz-skills as part of a conventional qb-core install.
@@ -23,9 +33,7 @@ NOTE: You should have each of the dependencies other than qb-lock and mz-skills 
 
 **[qb-target](https://github.com/qbcore-framework/qb-target)**
 
-**[qb-lock](https://github.com/Nathan-FiveM/qb-lock)**
-
-OPTIONAL: You will need "plastic" and "rustynails" each of which is given by mz-bins and mz-scrap, respectively. If you are not running those resources, you will either need to add these items separately or replace them as crafting inputs. Both resources, like mz-skills, is freely available at:
+OPTIONAL: You will need "plastic" and "rustynails" each of which is given by mz-bins and mz-scrap, respectively. If you are not running those resources, you will either need to add these items separately or replace them as crafting inputs. Both resources, like mz-skills, are freely available at:
 
 **[mz-bins](https://github.com/MrZainRP/mz-bins)**
 
@@ -61,7 +69,7 @@ OPTIONAL: You will need "plastic" and "rustynails" each of which is given by mz-
 4. "plastic" should be a part of your default qb-core server, I have included optional additional items here if your server does not include them:
 
 ```lua
-	['plastic'] 					 = {['name'] = 'plastic', 			  	  	  	['label'] = 'Plastic', 					['weight'] = 100, 		['type'] = 'item', 		['image'] = 'plastic.png', 				['unique'] = false, 	['useable'] = false, 	['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'RECYCLE! - Greta Thunberg 2019'},
+	['plastic'] 					 = {['name'] = 'plastic', 			  	  	  	['label'] = 'Plastic', 					['weight'] = 100, 		['type'] = 'item', 		['image'] = 'plastic.png', 				['unique'] = false, 	['useable'] = false, 	['shouldClose'] = false,   ['combinable'] = nil,   ['description'] = 'A neat piece which has been recycled. Plastic has a number of uses, what will you do with this?'},
 	["rustynails"]         	 	 = {["name"] = "rustynails",         		["label"] = "Rusted Nails",    			["weight"] = 150,       ["type"] = "item",      ["image"] = "rustynails.png",     		["unique"] = false,     ["useable"] = true,     ["shouldClose"] = true,    ["combinable"] = nil,   ["description"] = "A collection of nails that have seen better days... Perhaps they can be cleaned?"},
 ```
 
@@ -80,7 +88,7 @@ OPTIONAL: You will need "plastic" and "rustynails" each of which is given by mz-
 Please note: The change to the battle axe is purely aesthetic, if it causes an issue with the functionality of the resource, the change can be reverted:
 
 ```lua
-['weapon_battleaxe'] 			 = {['name'] = 'weapon_battleaxe', 		 	  	['label'] = 'Battle Axe', 				['weight'] = 1000, 		['type'] = 'weapon', 	['ammotype'] = nil,						['image'] = 'weapon_battleaxe.png', 	['unique'] = true, 		['useable'] = false, 	['description'] = 'A large broad-bladed axe used in ancient warfare'},
+    ['weapon_battleaxe'] 			 = {['name'] = 'weapon_battleaxe', 		 	  	['label'] = 'Battle Axe', 				['weight'] = 1000, 		['type'] = 'weapon', 	['ammotype'] = nil,						['image'] = 'weapon_battleaxe.png', 	['unique'] = true, 		['useable'] = false, 	['description'] = 'A large broad-bladed axe used in ancient warfare'},
 ```
 
 7. In order to allow the axe to be purchaseable, you can amend QB-SHOPS/CONFIG.LUA to add the following to the end of the "hardware" store (starting at line 258 of config.lua if you have not otherwise amended qb-shops):
@@ -98,4 +106,8 @@ Please note: The change to the battle axe is purely aesthetic, if it causes an i
 
 ### E. RESTART SERVER
 
-8. If you attend to all of the above steps you will need to restart the server in order for the new added items to be recognised by qb-core. Starting the mz-scrap resource without doing this will cause errors. Please restart your server ensuring that mz-lumberjack is ensured/starts after qb-core starts (ideally it should just form part of your [qb] folder). Happy tree chopping and crafting!
+8. If you attend to all of the above steps you will need to restart the server in order for the new added items to be recognised by qb-core. Starting the mz-scrap resource without doing this will cause errors. 
+
+9. Please restart your server ensuring that mz-lumberjack is ensured/starts after qb-core starts (ideally it should just form part of your [qb] folder). Happy tree chopping and crafting!
+
+10. mz-lumberjack is inspired by TRClassic#0001's "tr-lumberjack" resource - Please visit: **[tr-lumberjack](https://github.com/trclassic92/tr-lumberjack)**
