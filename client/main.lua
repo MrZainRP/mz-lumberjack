@@ -1344,7 +1344,7 @@ function MakePalletMinigame(source)
         width = math.random(13, 17),
     }, function()
         if SucceededAttempts + 1 >= NeededAttempts then
-            MakePalletProcess()
+            TriggerEvent('mz-lumberjack:client:MakePalletProcess')
             Wait(500)
             if Config.NotifyType == 'qb' then
                 QBCore.Functions.Notify('You start building a wooden pallet...', "success", 3500)
