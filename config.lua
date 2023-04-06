@@ -51,6 +51,8 @@ Config.Axe = {
     [`weapon_battleaxe`] = {}
 }
 
+Config.ReqItem = "weapon_battleaxe"     -- Item required in order to be able to chop down trees.
+
 Config.Axebreak = true                  -- Change to "false" if you do not want a chance for the axe to break.
 
 Config.Axebreakchance = 1               -- Chance for the axe to break (in percentage, e.g. 1 = 1%)

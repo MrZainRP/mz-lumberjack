@@ -6,7 +6,7 @@ author 'Mr_Zain#4139'
 
 description 'mz-lumberjack - Progression based tree chopping with mz-skills integration'
 
-version '2.0.0'
+version '2.0.1'
 
 client_scripts {
     '@PolyZone/client.lua',
