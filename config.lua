@@ -22,6 +22,8 @@ Config.LumberLevel8 = 32800
 -- Set this to "true" if you want to enable a processing lumber skill check (a different skill check applies for chopping wood) 
 Config.ProcessMaterialCheck = true      -- Set to "false" to disable progressbar mini-game when processing various wood products.
 
+Config.finalparse = true                -- Set to "true" to payout one more time when chopping progress bar completes. Otherwise set to false
+
 ---------------
 --TREE SET UP--
 ---------------
@@ -50,8 +52,6 @@ Config.skillfailXP = 1                  -- amount of mz-skill (default is "Lumbe
 Config.Axe = {
     [`weapon_battleaxe`] = {}
 }
-
-Config.ReqItem = "weapon_battleaxe"     -- Item required in order to be able to chop down trees.
 
 Config.Axebreak = true                  -- Change to "false" if you do not want a chance for the axe to break.
 
