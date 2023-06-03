@@ -1770,7 +1770,7 @@ CreateThread(function()
         SetBlipAsShortRange(blip, true)
         SetBlipColour(blip, 2)
         BeginTextCommandSetBlipName('STRING')
-        AddTextComponentSubstringPlayerName("Los Santos Lumber")
+        AddTextComponentSubstringPlayerName("Mavro's Lumber")
         EndTextCommandSetBlipName(blip)
     end
 end)
