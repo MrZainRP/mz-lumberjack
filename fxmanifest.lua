@@ -4,9 +4,9 @@ game 'gta5'
 
 author 'Mr_Zain#4139'
 
-description 'mz-lumberjack - Progression based tree chopping with mz-skills integration'
+description 'mz-lumberjack - Progression based tree chopping (with or without mz-skills integration)'
 
-version '2.0.1'
+version '2.0.2'
 
 client_scripts {
     '@PolyZone/client.lua',

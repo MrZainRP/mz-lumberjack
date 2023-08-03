@@ -1,18 +1,10 @@
 local QBCore = exports['qb-core']:GetCoreObject()
+
 local chopping = false
 local NeededAttempts = 0
 local SucceededAttempts = 0
 local FailedAttemps = 0
 local skilled = false
-local lvl0 = false
-local lvl1 = false 
-local lvl2 = false
-local lvl3 = false 
-local lvl4 = false
-local lvl5 = false 
-local lvl6 = false
-local lvl7 = false 
-local lvl8 = false
 local treebarkprocess = false
 local baggingmulch = false
 local woodwedgeprocess = false
@@ -22,6 +14,16 @@ local thicklogprocess = false
 local thickerlogprocess = false
 local makepalletprocess = false
 local makemulchbagprocess = false
+
+local lvl0 = false
+local lvl1 = false 
+local lvl2 = false
+local lvl3 = false 
+local lvl4 = false
+local lvl5 = false 
+local lvl6 = false
+local lvl7 = false 
+local lvl8 = false
 
 RegisterNetEvent('mz-lumberjack:getLumberStage', function(stage, state, k)
     Config.TreeLocations[k][stage] = state
@@ -45,21 +47,22 @@ RegisterNetEvent('mz-lumberjack:StartChopping', function()
                 if Config.Axeskillcheck then 
                     local choptime = math.random(Config.parsetimelow, Config.parsetimehigh)
                     local chopparses = math.random(Config.lowparse, Config.highparse)
-                    local skilled = exports['qb-lock']:StartLockPickCircle(chopparses, choptime)
-                    if skilled then
-                        ChopLumber(k)
-                        skilled = false 
-                    else
-                        if Config.mzskills then 
-                            local deteriorate = -Config.skillfailXP
-                            exports["mz-skills"]:UpdateSkill(Config.LumberSkill, deteriorate)
-                            if Config.NotifyType == 'qb' then
-                                QBCore.Functions.Notify('-'..Config.skillfailXP.. 'XP to '..Config.LumberSkill..'.', "error", 3500)
-                            elseif Config.NotifyType == "okok" then
-                                exports['okokNotify']:Alert("SKILLS", '-'..Config.skillfailXP.. 'XP to '..Config.LumberSkill..'.', 3500, "error")
-                            end   
+                    exports['ps-ui']:Circle(function(success)
+                        if success then
+                            ChopLumber(k)
+                            success = false 
+                        else
+                            if Config.mzskills then 
+                                local deteriorate = -Config.skillfailXP
+                                exports["mz-skills"]:UpdateSkill(Config.LumberSkill, deteriorate)
+                                if Config.NotifyType == 'qb' then
+                                    QBCore.Functions.Notify('-'..Config.skillfailXP.. 'XP to '..Config.LumberSkill..'.', "error", 3500)
+                                elseif Config.NotifyType == "okok" then
+                                    exports['okokNotify']:Alert("SKILLS", '-'..Config.skillfailXP.. 'XP to '..Config.LumberSkill..'.', 3500, "error")
+                                end   
+                            end
                         end
-                    end
+                    end, chopparses, choptime)
                 else
                     ChopLumber(k)
                 end
@@ -118,122 +121,62 @@ end)
 local finishChopCheck = true 
 
 local function ChopLumber(k)
-    local animDict = "melee@hatchet@streamed_core"
-    local animName = "plyr_rear_takedown_b"
-    local Player = PlayerPedId()
-    local choptime = (Config.Choptime * 1000)
-    chopping = true
-    if Config.mzskills then 
-        TriggerEvent('mz-lumberjack:XPCheck')
-    end 
-    FreezeEntityPosition(Player, true)
-    QBCore.Functions.Progressbar("Chopping_Tree", "Chopping tree...", choptime, false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
-    }, {}, {}, {}, function()
-        TriggerServerEvent('mz-lumberjack:setLumberStage', "isChopped", true, k)
-        TriggerServerEvent('mz-lumberjack:setLumberStage', "isOccupied", false, k)
-        TriggerServerEvent('mz-lumberjack:setChoppedTimer')
+    if QBCore.Functions.HasItem("weapon_battleaxe") then
+        local animDict = "melee@hatchet@streamed_core"
+        local animName = "plyr_rear_takedown_b"
+        local Player = PlayerPedId()
+        chopping = true
         if Config.mzskills then 
-            local chance = 1
-            exports["mz-skills"]:UpdateSkill(Config.LumberSkill, chance)
-            if Config.Axebreak then 
-                TriggerServerEvent('mz-lumberjack:server:RemoveAxe')
-            end
-        else 
-            if Config.Axebreak then 
-                TriggerServerEvent('mz-lumberjack:server:RemoveAxe')
-            end
-        end
-        chopping = false
-        ClearPedTasks(Player)
-        TaskPlayAnim(Player, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
-        FreezeEntityPosition(Player, false)
-    end, function()
-        ClearPedTasks(Player)
-        TriggerServerEvent('mz-lumberjack:setLumberStage', "isOccupied", false, k)
-        chopping = false
-        TaskPlayAnim(Player, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
-        FreezeEntityPosition(Player, false)
-    end)
-    TriggerServerEvent('mz-lumberjack:setLumberStage', "isOccupied", true, k)
-    CreateThread(function()
-        local counter = 2
-        while chopping do
-            counter = counter - 1
-            loadAnimDict(animDict)
-            TaskPlayAnim(Player, animDict, animName, 3.0, 3.0, -1, 2, 0, 0, 0, 0 )
-            Wait(Config.Choptime*1000/6.25)
-            loadAnimDict(animDict)
-            TaskPlayAnim(Player, animDict, animName, 3.0, 3.0, -1, 2, 0, 0, 0, 0 )
-            Wait(Config.Choptime*1000/6.25)
-            loadAnimDict(animDict)
-            TaskPlayAnim(Player, animDict, animName, 3.0, 3.0, -1, 2, 0, 0, 0, 0 )
-            Wait(Config.Choptime*1000/6.25)
-            if counter > 0 and chopping then
-                if Config.mzskills then 
-                    finishChopCheck = false 
-                    if lvl8 then 
-                        TriggerServerEvent('mz-lumberjack:lumberPayoutlvl8', finishChopCheck)
-                        finishChopCheck = true 
-                        Wait(Config.Choptime*1000/26)
-                    elseif lvl7 then
-                        TriggerServerEvent('mz-lumberjack:lumberPayoutlvl7', finishChopCheck)
-                        finishChopCheck = true 
-                        Wait(Config.Choptime*1000/26)
-                    elseif lvl6 then
-                        TriggerServerEvent('mz-lumberjack:lumberPayoutlvl6', finishChopCheck)
-                        finishChopCheck = true 
-                        Wait(Config.Choptime*1000/26)
-                    elseif lvl5 then 
-                        TriggerServerEvent('mz-lumberjack:lumberPayoutlvl5', finishChopCheck)
-                        finishChopCheck = true 
-                        Wait(Config.Choptime*1000/26)
-                    elseif lvl4 then 
-                        TriggerServerEvent('mz-lumberjack:lumberPayoutlvl4', finishChopCheck)
-                        finishChopCheck = true 
-                        Wait(Config.Choptime*1000/26)
-                    elseif lvl3 then 
-                        TriggerServerEvent('mz-lumberjack:lumberPayoutlvl3', finishChopCheck)
-                        finishChopCheck = true 
-                        Wait(Config.Choptime*1000/26)
-                    elseif lvl2 then 
-                        TriggerServerEvent('mz-lumberjack:lumberPayoutlvl2', finishChopCheck)
-                        finishChopCheck = true 
-                        Wait(Config.Choptime*1000/26)
-                    elseif lvl1 then 
-                        TriggerServerEvent('mz-lumberjack:lumberPayoutlvl1', finishChopCheck)
-                        finishChopCheck = true 
-                        Wait(Config.Choptime*1000/26)
-                    elseif lvl0 then  
-                        TriggerServerEvent('mz-lumberjack:lumberPayoutlvl0', finishChopCheck)
-                        finishChopCheck = true 
-                        Wait(Config.Choptime*1000/26)
-                    end
-                else 
-                    TriggerServerEvent('mz-lumberjack:server:lumberPayoutNOXP', finishChopCheck)
-                    finishChopCheck = true 
-                    Wait(Config.Choptime*1000/26)
-                end 
-            elseif counter == 0 then 
-                chopping = false
-                ClearPedTasks(Player)
-                TaskPlayAnim(Player, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
-                FreezeEntityPosition(Player, false)
-                if Config.mzskills then 
-                    local lvl0 = false
-                    local lvl1 = false 
-                    local lvl2 = false
-                    local lvl3 = false 
-                    local lvl4 = false
-                    local lvl5 = false 
-                    local lvl6 = false
-                    local lvl7 = false 
-                    local lvl8 = false
+            TriggerEvent('mz-lumberjack:XPCheck')
+        end 
+        FreezeEntityPosition(Player, true)
+        local choptime = (Config.Choptime * 1000)
+        QBCore.Functions.Progressbar("Chopping_Tree", "Chopping tree...", choptime, false, true, {
+            disableMovement = true,
+            disableCarMovement = true,
+            disableMouse = false,
+            disableCombat = true,
+        }, {}, {}, {}, function()
+            TriggerServerEvent('mz-lumberjack:setLumberStage', "isChopped", true, k)
+            TriggerServerEvent('mz-lumberjack:setLumberStage', "isOccupied", false, k)
+            TriggerServerEvent('mz-lumberjack:setChoppedTimer')
+            if Config.mzskills then 
+                local chance = 1
+                exports["mz-skills"]:UpdateSkill(Config.LumberSkill, chance)
+                if Config.Axebreak then 
+                    TriggerServerEvent('mz-lumberjack:server:RemoveAxe')
                 end
-                if Config.finalparse then 
+            else 
+                if Config.Axebreak then 
+                    TriggerServerEvent('mz-lumberjack:server:RemoveAxe')
+                end
+            end
+            chopping = false
+            ClearPedTasks(Player)
+            TaskPlayAnim(Player, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
+            FreezeEntityPosition(Player, false)
+        end, function()
+            ClearPedTasks(Player)
+            TriggerServerEvent('mz-lumberjack:setLumberStage', "isOccupied", false, k)
+            chopping = false
+            TaskPlayAnim(Player, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
+            FreezeEntityPosition(Player, false)
+        end)
+        TriggerServerEvent('mz-lumberjack:setLumberStage', "isOccupied", true, k)
+        CreateThread(function()
+            local counter = 2
+            while chopping do
+                counter = counter - 1
+                loadAnimDict(animDict)
+                TaskPlayAnim(Player, animDict, animName, 3.0, 3.0, -1, 2, 0, 0, 0, 0 )
+                Wait(Config.Choptime*1000/6.25)
+                loadAnimDict(animDict)
+                TaskPlayAnim(Player, animDict, animName, 3.0, 3.0, -1, 2, 0, 0, 0, 0 )
+                Wait(Config.Choptime*1000/6.25)
+                loadAnimDict(animDict)
+                TaskPlayAnim(Player, animDict, animName, 3.0, 3.0, -1, 2, 0, 0, 0, 0 )
+                Wait(Config.Choptime*1000/6.25)
+                if counter > 0 and chopping then
                     if Config.mzskills then 
                         finishChopCheck = false 
                         if lvl8 then 
@@ -277,11 +220,85 @@ local function ChopLumber(k)
                         TriggerServerEvent('mz-lumberjack:server:lumberPayoutNOXP', finishChopCheck)
                         finishChopCheck = true 
                         Wait(Config.Choptime*1000/26)
+                    end 
+                elseif counter == 0 then 
+                    chopping = false
+                    ClearPedTasks(Player)
+                    TaskPlayAnim(Player, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
+                    FreezeEntityPosition(Player, false)
+                    if Config.mzskills then 
+                        local lvl0 = false
+                        local lvl1 = false 
+                        local lvl2 = false
+                        local lvl3 = false 
+                        local lvl4 = false
+                        local lvl5 = false 
+                        local lvl6 = false
+                        local lvl7 = false 
+                        local lvl8 = false
                     end
-                end  
+                    if Config.finalparse then 
+                        if Config.mzskills then 
+                            finishChopCheck = false 
+                            if lvl8 then 
+                                TriggerServerEvent('mz-lumberjack:lumberPayoutlvl8', finishChopCheck)
+                                finishChopCheck = true 
+                                Wait(Config.Choptime*1000/26)
+                            elseif lvl7 then
+                                TriggerServerEvent('mz-lumberjack:lumberPayoutlvl7', finishChopCheck)
+                                finishChopCheck = true 
+                                Wait(Config.Choptime*1000/26)
+                            elseif lvl6 then
+                                TriggerServerEvent('mz-lumberjack:lumberPayoutlvl6', finishChopCheck)
+                                finishChopCheck = true 
+                                Wait(Config.Choptime*1000/26)
+                            elseif lvl5 then 
+                                TriggerServerEvent('mz-lumberjack:lumberPayoutlvl5', finishChopCheck)
+                                finishChopCheck = true 
+                                Wait(Config.Choptime*1000/26)
+                            elseif lvl4 then 
+                                TriggerServerEvent('mz-lumberjack:lumberPayoutlvl4', finishChopCheck)
+                                finishChopCheck = true 
+                                Wait(Config.Choptime*1000/26)
+                            elseif lvl3 then 
+                                TriggerServerEvent('mz-lumberjack:lumberPayoutlvl3', finishChopCheck)
+                                finishChopCheck = true 
+                                Wait(Config.Choptime*1000/26)
+                            elseif lvl2 then 
+                                TriggerServerEvent('mz-lumberjack:lumberPayoutlvl2', finishChopCheck)
+                                finishChopCheck = true 
+                                Wait(Config.Choptime*1000/26)
+                            elseif lvl1 then 
+                                TriggerServerEvent('mz-lumberjack:lumberPayoutlvl1', finishChopCheck)
+                                finishChopCheck = true 
+                                Wait(Config.Choptime*1000/26)
+                            elseif lvl0 then  
+                                TriggerServerEvent('mz-lumberjack:lumberPayoutlvl0', finishChopCheck)
+                                finishChopCheck = true 
+                                Wait(Config.Choptime*1000/26)
+                            end
+                        else 
+                            TriggerServerEvent('mz-lumberjack:server:lumberPayoutNOXP', finishChopCheck)
+                            finishChopCheck = true 
+                            Wait(Config.Choptime*1000/26)
+                        end
+                    end  
+                end
             end
-        end
-    end)
+        end)
+    else
+        local requiredItems = {
+            [1] = {name = QBCore.Shared.Items["weapon_battleaxe"]["name"], image = QBCore.Shared.Items["weapon_battleaxe"]["image"]}, 
+        }  
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You need an axe to cut this tree...', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("NEED AXE", "You need an axe to cut this tree...", 3500, "error")
+        end   
+        TriggerEvent('inventory:client:requiredItems', requiredItems, true)
+        Wait(3000)
+        TriggerEvent('inventory:client:requiredItems', requiredItems, false)
+    end
 end
 
 CreateThread(function()
@@ -300,21 +317,22 @@ CreateThread(function()
                             if Config.Axeskillcheck then 
                                 local choptime = math.random(Config.parsetimelow, Config.parsetimehigh)
                                 local chopparses = math.random(Config.lowparse, Config.highparse)
-                                local skilled = exports['qb-lock']:StartLockPickCircle(chopparses, choptime)
-                                if skilled then
-                                    ChopLumber(k)
-                                    skilled = false 
-                                else
-                                    if Config.mzskills then
-                                        local deteriorate = -Config.skillfailXP
-                                        exports["mz-skills"]:UpdateSkill(Config.LumberSkill, deteriorate)
-                                        if Config.NotifyType == 'qb' then
-                                            QBCore.Functions.Notify('-'..Config.skillfailXP.. 'XP to '..Config.LumberSkill..'.', "error", 3500)
-                                        elseif Config.NotifyType == "okok" then
-                                            exports['okokNotify']:Alert("SKILLS", '-'..Config.skillfailXP.. 'XP to '..Config.LumberSkill..'.', 3500, "error")
-                                        end   
+                                exports['ps-ui']:Circle(function(success)
+                                    if success then
+                                        ChopLumber(k)
+                                        success = false 
+                                    else
+                                        if Config.mzskills then 
+                                            local deteriorate = -Config.skillfailXP
+                                            exports["mz-skills"]:UpdateSkill(Config.LumberSkill, deteriorate)
+                                            if Config.NotifyType == 'qb' then
+                                                QBCore.Functions.Notify('-'..Config.skillfailXP.. 'XP to '..Config.LumberSkill..'.', "error", 3500)
+                                            elseif Config.NotifyType == "okok" then
+                                                exports['okokNotify']:Alert("SKILLS", '-'..Config.skillfailXP.. 'XP to '..Config.LumberSkill..'.', 3500, "error")
+                                            end   
+                                        end
                                     end
-                                end
+                                end, chopparses, choptime)
                             else
                                 ChopLumber(k)
                             end
@@ -476,27 +494,27 @@ function MulchBarkMinigame(source)
             })
         end
     end, function()
-    if Config.NotifyType == 'qb' then
-        QBCore.Functions.Notify('The bark breaks into unuseable pieces...', "error", 3500)
-    elseif Config.NotifyType == "okok" then
-        exports['okokNotify']:Alert("BARK RUINED", "The bark breaks into unuseable pieces...", 3500, "error")
-    end
-    if Config.mzskills then
-        Wait(500)
-        local deteriorate = -Config.mulchXPloss
-        exports["mz-skills"]:UpdateSkill(Config.LumberSkill, deteriorate)
         if Config.NotifyType == 'qb' then
-            QBCore.Functions.Notify('-'..Config.mulchXPloss.. 'XP to '..Config.LumberSkill..'.', "error", 3500)
+            QBCore.Functions.Notify('The bark breaks into unuseable pieces...', "error", 3500)
         elseif Config.NotifyType == "okok" then
-            exports['okokNotify']:Alert("SKILLS", '-'..Config.mulchXPloss.. 'XP to '..Config.LumberSkill..'.', 3500, "error")
+            exports['okokNotify']:Alert("BARK RUINED", "The bark breaks into unuseable pieces...", 3500, "error")
         end
-    end
-    treebarkprocess = false
-    FailedAttemps = 0
-    SucceededAttempts = 0
-    NeededAttempts = 0
-    craftprocesscheck = false
-    ClearPedTasks(PlayerPedId())
+        if Config.mzskills then
+            Wait(500)
+            local deteriorate = -Config.mulchXPloss
+            exports["mz-skills"]:UpdateSkill(Config.LumberSkill, deteriorate)
+            if Config.NotifyType == 'qb' then
+                QBCore.Functions.Notify('-'..Config.mulchXPloss.. 'XP to '..Config.LumberSkill..'.', "error", 3500)
+            elseif Config.NotifyType == "okok" then
+                exports['okokNotify']:Alert("SKILLS", '-'..Config.mulchXPloss.. 'XP to '..Config.LumberSkill..'.', 3500, "error")
+            end
+        end
+        treebarkprocess = false
+        FailedAttemps = 0
+        SucceededAttempts = 0
+        NeededAttempts = 0
+        craftprocesscheck = false
+        ClearPedTasks(PlayerPedId())
     end)
 end
 
@@ -1123,7 +1141,7 @@ function ProcessThickLogsMinigame(source)
         width = math.random(13, 17),
     }, function()
         if SucceededAttempts + 1 >= NeededAttempts then
-            ProcessThickLogsProcess()
+            TriggerEvent('mz-lumberjack:client:ProcessThickLogsProcess')
             Wait(500)
             if Config.NotifyType == 'qb' then
                 QBCore.Functions.Notify('You carefully cut through the thick pine logs...', "success", 3500)
@@ -1256,7 +1274,7 @@ function ProcessThickerLogsMinigame(source)
         width = math.random(13, 17),
     }, function()
         if SucceededAttempts + 1 >= NeededAttempts then
-            ProcessThickerLogsProcess()
+            TriggerEvent('mz-lumberjack:client:ProcessThickerLogsProcess')
             Wait(500)
             if Config.NotifyType == 'qb' then
                 QBCore.Functions.Notify('You begin to process the thicker pine log...', "success", 3500)
@@ -1304,7 +1322,7 @@ local thickerPlankCheck = true
 RegisterNetEvent('mz-lumberjack:client:ProcessThickerLogsProcess', function()
     thickerlogprocess = true 
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
-    local thickertime = math.random(Config.thickertimelow*1000, Config.thickertimehigh*1000)
+    local thickertime = math.random(Config.thickertimelow * 1000, Config.thickertimehigh * 1000)
     QBCore.Functions.Progressbar("grind_coke", "Processing thicker logs...", thickertime, false, true, {
         disableMovement = true,
         disableCarMovement = true,
