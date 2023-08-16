@@ -217,6 +217,7 @@ local function ChopLumber(k)
                             Wait(Config.Choptime*1000/26)
                         end
                     else 
+                        finishChopCheck = false 
                         TriggerServerEvent('mz-lumberjack:server:lumberPayoutNOXP', finishChopCheck)
                         finishChopCheck = true 
                         Wait(Config.Choptime*1000/26)
@@ -278,6 +279,7 @@ local function ChopLumber(k)
                                 Wait(Config.Choptime*1000/26)
                             end
                         else 
+                            finishChopCheck = false 
                             TriggerServerEvent('mz-lumberjack:server:lumberPayoutNOXP', finishChopCheck)
                             finishChopCheck = true 
                             Wait(Config.Choptime*1000/26)
